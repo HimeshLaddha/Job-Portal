@@ -1,52 +1,52 @@
-import { Webhook } from 'svix';
-import User from '../models/User.js';
+import { Webhook } from "svix";
+import User from "../models/User.js";
 
-// Api controller funtion to manage clerk user with database
+// API Controller function to manage clerk user with database
 export const clerkWebhooks = async (req, res) => {
     try {
 
         // create a svix instance with clerk webhook secret
-        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET)
+        const whook = new Webhook(process.env.CLERK_WEBHOOK_SECRET);
 
-        // verifing headers
+        // verifying headers
         await whook.verify(JSON.stringify(req.body), {
             "svix-id": req.headers["svix-id"],
-            "svix-timestamp": req.body["svix-timestamp"],
-            "svix-signature": req.body["svix-signature"]
+            "svix-timestamp": req.headers["svix-timestamp"],
+            "svix-signature": req.headers["svix-signature"]
         })
 
         // getting data from request body
-        const { data, type } = req.body;
+        const { body, type } = req.body;
 
         // switch case for different events
         switch (type) {
-            case 'user.created': {
+            case "user.created" : {
                 const userData = {
                     _id: data.id,
                     email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
                     image: data.image_url,
-                    resume: ''
+                    resume: ""
                 }
 
                 await User.create(userData);
-                res.json({});
+                res.json({ message: "User Created" })
                 break;
             }
-            case 'user.updated': {
+            case "user.updated" : {
                 const userData = {
                     email: data.email_addresses[0].email_address,
                     name: data.first_name + " " + data.last_name,
                     image: data.image_url
                 }
 
-                await User.findByIdAndUpdate(data._id, userData);
-                res.json({});
+                await User.findByIdAndUpdate(data.id, userData);
+                res.json({ message: "User Data Updated" })
                 break;
             }
-            case 'user.deleted': {
-                await User.findByIdAndDelete(data._id);
-                res.json({});
+            case "user.deleted" : {
+                await User.findByIdAndDelte(data.id);
+                res.json({ message: "User Deleted" })
                 break;
             }
             default:
@@ -55,6 +55,6 @@ export const clerkWebhooks = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
-        res.send({success: false, message: 'Webhooks Error'})
+        res.json({success: false, message: "Webhooks Error"})
     }
 }
