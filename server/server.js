@@ -5,6 +5,7 @@ import connectDB from "./config/db.js";
 // import './config/instrument.js'
 // import * as Sentry from "@sentry/node"
 import { clerkWebhooks } from "./controllers/webhooks.js";
+import User from "./models/User.js";
 
 // initialise express
 const app = express();
@@ -23,7 +24,24 @@ app.get('/', (req, res) => {
 app.get("/debug-sentry", function mainHandler(req, res) {
     throw new Error("My first Sentry error!");
 });
-app.post('/webhooks', clerkWebhooks)
+app.post("/webhooks", express.raw({ type: "application/json" }), clerkWebhooks);
+
+app.get("/test-db", async (req, res) => {
+    try {
+        const user = await User.create({
+            _id: "test_123",
+            name: "Test User",
+            email: "test@example.com",
+            image: "test.png",
+        });
+
+        res.json(user);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json(err);
+    }
+});
+
 
 // port
 const PORT = process.env.PORT || 5000;
