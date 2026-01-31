@@ -2,12 +2,11 @@ import express from "express"
 import cors from 'cors'
 import 'dotenv/config'
 import connectDB from "./config/db.js";
-// import './config/instrument.js'
-// import * as Sentry from "@sentry/node"
+import connectCloudinary from "./config/cloudinary.js";
 import { clerkWebhooks } from "./controllers/webhooks.js";
 import User from "./models/User.js";
 import companyRoutes from "./routes/companyRoutes.js"
-import connectCloudinary from "./config/cloudinary.js";
+import jobRoutes from"./routes/jobRoutes.js"
 
 // initialise express
 const app = express();
@@ -29,6 +28,7 @@ app.get("/debug-sentry", function mainHandler(req, res) {
 });
 app.post("/webhooks", express.raw({ type: "application/json" }), clerkWebhooks);
 app.use('/api/company', companyRoutes)
+app.use('/api/jobs', jobRoutes);
 
 // port
 const PORT = process.env.PORT || 5000;
