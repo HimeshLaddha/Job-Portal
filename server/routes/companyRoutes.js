@@ -21,7 +21,7 @@ router.post('/post-job', protectCompany, postJob);
 router.get('/applicants', protectCompany, getCompanyJobApplicants);
 
 // get company job list
-router.get('/list-job', protectCompany, getCompanyPostedJobs);
+router.get('/list-jobs', protectCompany, getCompanyPostedJobs);
 
 // change application status
 router.post('/change-status', protectCompany, changeJobApplicationStatus);
