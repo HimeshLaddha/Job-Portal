@@ -25,7 +25,6 @@ const ManageJobs = () => {
 
       if (data.success) {
         setJobs(data.jobsData.reverse());
-        console.log(data.jobsData)
       } else {
         toast.error(data.message)
       }
