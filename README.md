@@ -2,6 +2,10 @@
 
 A full-stack Job Portal application built with the MERN stack (MongoDB, Express, React, Node.js), featuring authentication with Clerk, file uploads with Cloudinary, and error monitoring with Sentry.
 
+## 🌐 Live Demo
+
+Check out the live application here: [Job Portal Live Demo](https://job-portal-frontend-tau-dusky.vercel.app/)
+
 ## 🚀 Features
 
 - **User Authentication**: Secure signup and login for job seekers and recruiters using [Clerk](https://clerk.com/).
